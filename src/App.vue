@@ -1,27 +1,25 @@
 <template>
   <div id="app">
     <h1>Gmail API demo</h1>
-
+    <inbox :emails="emails" />
     <button id="authorize-button" class="btn btn-primary hidden" @click="handleAuthClick">Authorize</button>
     <button id="authorize-button" class="btn btn-primary hidden" @click="displayInbox">Display inbox</button>
-
-    <table class="table table-striped table-inbox hidden">
-      <thead>
-        <tr>
-          <th>From</th>
-          <th>Subject</th>
-          <th>Date/Time</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
   </div>
 </template>
 
 <script>
+import inbox from "./components/Inbox.vue";
 import { extractHeader, decodeMessageBody } from "@/utilities/index.js";
 export default {
   name: "app",
+  data() {
+    return {
+      emails: []
+    };
+  },
+  components: {
+    inbox
+  },
   mounted() {
     this.$nextTick(() => {
       this.handleClientLoad();
@@ -71,13 +69,16 @@ export default {
       });
 
       request.execute(response => {
+        const messages = [];
         response.messages.forEach(async message => {
           let messageRequest = await gapi.client.gmail.users.messages.get({
             userId: "me",
             id: message.id
           });
-          this.appendMessageRow(messageRequest);
+          //this.appendMessageRow(messageRequest);
+          messages.push(messageRequest);
         });
+        this.emails = messages;
       });
     },
     appendMessageRow(message) {
