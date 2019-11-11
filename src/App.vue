@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { extractHeader } from "@/utilities/index.js";
+import { extractHeader, decodeMessageBody } from "@/utilities/index.js";
 export default {
   name: "app",
   mounted() {
@@ -81,7 +81,8 @@ export default {
       });
     },
     appendMessageRow(message) {
-      console.log(extractHeader(message.result.payload.headers, "From"));
+      const from = extractHeader(message.result.payload.headers, "From");
+      const messageContent = decodeMessageBody(message);
     }
   }
 };
