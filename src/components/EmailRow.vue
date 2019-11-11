@@ -1,16 +1,22 @@
 <template>
   <tr>
-    <td>Mark</td>
-    <td>Work for us</td>
-    <td>Today</td>
+    <td>{{showHeader("From")}}</td>
+    <td>{{showHeader("Subject")}}</td>
+    <td>{{showHeader("Date")}}</td>
   </tr>
 </template>
 
 <script>
+import { extractHeader, decodeMessageBody } from "../utilities/index";
 export default {
   name: "EmailRow",
   props: {
     email: Object
+  },
+  methods: {
+    showHeader(type) {
+      return extractHeader(this.email.result.payload.headers, type);
+    }
   }
 };
 </script>
