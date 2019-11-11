@@ -1,29 +1,34 @@
 <template>
   <div id="app">
     <h1>Gmail API demo</h1>
-    <inbox :emails="emails" />
-    <button id="authorize-button" class="btn btn-primary hidden" @click="handleAuthClick">Authorize</button>
-    <button id="authorize-button" class="btn btn-primary hidden" @click="displayInbox">Display inbox</button>
+    <inbox :emails="emails" v-if="!loading" />
+    <div v-if="loading" class="loading">
+      <pulse-loader :loading="loading" :color="color" :size="size"></pulse-loader>
+    </div>
+    <!-- <button id="authorize-button" class="btn btn-primary hidden" @click="handleAuthClick">Authorize</button>
+    <button id="authorize-button" class="btn btn-primary hidden" @click="displayInbox">Display inbox</button>-->
   </div>
 </template>
 
 <script>
 import inbox from "./components/Inbox.vue";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import { extractHeader, decodeMessageBody } from "@/utilities/index.js";
 export default {
   name: "app",
   data() {
     return {
-      emails: []
+      emails: [],
+      loading: false
     };
   },
   components: {
-    inbox
+    inbox,
+    PulseLoader
   },
   mounted() {
-    this.$nextTick(() => {
-      this.handleClientLoad();
-    });
+    this.loading = true;
+    this.handleClientLoad();
   },
   methods: {
     handleClientLoad() {
@@ -79,6 +84,7 @@ export default {
           messages.push(messageRequest);
         });
         this.emails = messages;
+        this.loading = false;
       });
     },
     appendMessageRow(message) {
@@ -90,4 +96,11 @@ export default {
 </script>
 
 <style scoped>
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 90vh;
+}
 </style>
