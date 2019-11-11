@@ -3,6 +3,7 @@
     <h1>Gmail API demo</h1>
 
     <button id="authorize-button" class="btn btn-primary hidden" @click="handleAuthClick">Authorize</button>
+    <button id="authorize-button" class="btn btn-primary hidden" @click="displayInbox">Display inbox</button>
 
     <table class="table table-striped table-inbox hidden">
       <thead>
@@ -18,6 +19,7 @@
 </template>
 
 <script>
+import { extractHeader } from "@/utilities/index.js";
 export default {
   name: "app",
   mounted() {
@@ -55,8 +57,31 @@ export default {
     },
     handleAuthResult(authResult) {
       if (authResult && !authResult.error) {
-        loadGmailApi();
+        this.loadGmailApi();
       }
+    },
+    loadGmailApi() {
+      gapi.client.load("gmail", "v1", this.displayInbox);
+    },
+    displayInbox() {
+      var request = gapi.client.gmail.users.messages.list({
+        userId: "me",
+        labelIds: "INBOX",
+        maxResults: 10
+      });
+
+      request.execute(response => {
+        response.messages.forEach(async message => {
+          let messageRequest = await gapi.client.gmail.users.messages.get({
+            userId: "me",
+            id: message.id
+          });
+          this.appendMessageRow(messageRequest);
+        });
+      });
+    },
+    appendMessageRow(message) {
+      console.log(extractHeader(message.result.payload.headers, "From"));
     }
   }
 };
