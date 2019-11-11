@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table class="table">
     <thead>
       <tr>
         <th>From</th>
@@ -27,4 +27,10 @@ export default {
 </script>
 
 <style scoped>
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+}
 </style>
