@@ -26,6 +26,10 @@ export default {
   background-color: #f5f5f5;
 }
 
+.table__row {
+  background-color: #fff;
+}
+
 .table__row td {
   border-top: 1px solid black;
   border-bottom: 1px solid black;

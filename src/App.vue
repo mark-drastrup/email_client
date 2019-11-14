@@ -96,6 +96,16 @@ export default {
 </script>
 
 <style scoped>
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  padding: 15px;
+  background-color: #f1f1f1;
+}
+
 .loading {
   display: flex;
   justify-content: center;
