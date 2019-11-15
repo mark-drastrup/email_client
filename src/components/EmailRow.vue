@@ -1,5 +1,5 @@
 <template>
-  <tr class="table__row">
+  <tr class="table__row" @click="showMessage">
     <td>{{showHeader("From")}}</td>
     <td>{{showHeader("Subject")}}</td>
     <td>{{showHeader("Date")}}</td>
@@ -16,6 +16,9 @@ export default {
   methods: {
     showHeader(type) {
       return extractHeader(this.email.result.payload.headers, type);
+    },
+    showMessage() {
+      this.$store.commit("setCurrentEmail", this.email);
     }
   }
 };

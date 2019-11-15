@@ -1,5 +1,8 @@
 <template>
-  <table class="table">
+  <div v-if="currentEmail !== null">
+    <p>Current email</p>
+  </div>
+  <table class="table" v-else>
     <thead>
       <tr>
         <th>From</th>
@@ -22,6 +25,11 @@ export default {
   },
   components: {
     emailRow
+  },
+  computed: {
+    currentEmail() {
+      return this.$store.state.currentEmail;
+    }
   }
 };
 </script>
