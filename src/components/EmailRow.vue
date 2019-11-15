@@ -18,7 +18,7 @@ export default {
       return extractHeader(this.email.result.payload.headers, type);
     },
     showMessage() {
-      this.$store.commit("setCurrentEmail", this.email);
+      this.$store.dispatch("decodeEmail", this.email);
     }
   }
 };
