@@ -13,14 +13,16 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    decodeEmail({ commit, dispatch }, email) {
+    async decodeEmail({ commit, dispatch }, email) {
       let encodedBody = "";
       if (email.result.payload.parts === undefined) {
         encodedBody = email.result.payload.body.data;
       } else {
-        encodedBody = dispatch("extractHTMLPart", email.result.payload.parts);
+        encodedBody = await dispatch(
+          "extractHTMLPart",
+          email.result.payload.parts
+        );
       }
-
       encodedBody = encodedBody
         .replace(/-/g, "+")
         .replace(/_/g, "/")
@@ -28,7 +30,7 @@ export default new Vuex.Store({
       const message = decodeURIComponent(escape(window.atob(encodedBody)));
       commit("setCurrentEmail", message);
     },
-    extractHTMLPart(arr) {
+    extractHTMLPart({ commit, dispatch }, arr) {
       for (var x = 0; x <= arr.length; x++) {
         if (typeof arr[x].parts === "undefined") {
           if (arr[x].mimeType === "text/html") {
